@@ -330,9 +330,14 @@
     maskLayer.classList.toggle('cb-mask-active', t >= MASK_START && t <= MASK_END);
   });
 
-  /* ══ 씬 이탈 시 레이어 숨김 ══ */
+  /* ══ 씬 이탈 시 레이어 숨김 + 마스크 스트로브 정리 ══ */
   window.addEventListener('sceneChange', (e) => {
-    flameLayer.style.display = e.detail.index === 8 ? '' : 'none';
+    if (e.detail.index === 8) {
+      flameLayer.style.display = '';
+    } else {
+      flameLayer.style.display = 'none';
+      maskLayer.classList.remove('cb-mask-active');  /* 스트로브 애니메이션 확실히 정지 */
+    }
   });
 
 })();

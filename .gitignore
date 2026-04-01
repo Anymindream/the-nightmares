@@ -10,6 +10,9 @@ CLAUDE.md
 # Node
 node_modules/
 
+# Dev server
+serve.py
+
 # Temp / Placeholder
 tmp/
 temp/

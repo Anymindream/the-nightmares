@@ -37,8 +37,9 @@
   const CMD3_FADE_IN   =  8000;   /* commander3 페이드 인 */
 
   /* ── 큐 상태 ── */
-  let cuesFired   = { cmd: false, star: false, starout: false, cmd3: false, sunray: false };
-  let lastAudioT  = 0;
+  let cuesFired        = { cmd: false, star: false, starout: false, cmd3: false, sunray: false };
+  let lastAudioT       = 0;
+  let awaitingSceneAudio = false;  /* 씬 진입 직후 이전 씬 오디오 이벤트 차단 플래그 */
 
   let timeouts = [];
   function later(fn, ms) { const id = setTimeout(fn, ms); timeouts.push(id); return id; }
@@ -65,7 +66,7 @@
   ════════════════════════════════════════════ */
   const skyImg = document.createElement('img');
   skyImg.className = 'dc-sky-img';
-  skyImg.src = 'Images/9dream-commander2-0.webp';
+  skyImg.src = 'Images/commander/9dream-commander2.webp';
   skyImg.style.cssText = [
     'position:absolute', 'inset:0',
     'width:100%', 'height:100%',
@@ -552,16 +553,16 @@
   function runSequence() {
     reset();
     clearAll();
-    cuesFired = { cmd: false, star: false, starout: false, cmd3: false, sunray: false };
+    cuesFired          = { cmd: false, star: false, starout: false, cmd3: false, sunray: false };
+    lastAudioT         = 0;     /* 이전 씬 체류 중 누적된 타임스탬프 초기화 */
+    awaitingSceneAudio = true;  /* 새 오디오가 시작될 때까지 stale 이벤트 차단 */
 
-    /* 아직 1:07 이전이면 Phase 1 (루프 번개 + 연기) 시작 */
-    if (lastAudioT < CUE_CMD) {
-      startLoopLightning();
-      startSmoke();
-    }
+    /* 항상 Phase 1 (루프 번개 + 연기) 부터 시작 */
+    startLoopLightning();
+    startSmoke();
 
-    /* 이미 지난 큐는 즉시 실행 */
-    checkCues(lastAudioT);
+    /* lastAudioT = 0 이므로 어떤 큐도 발동되지 않음 */
+    checkCues(0);
   }
 
   function stop() {
@@ -574,6 +575,14 @@
   window.addEventListener('audioTimeUpdate', (e) => {
     if (typeof current === 'undefined' || current !== 9) return;
     const t = e.detail.time;
+
+    /* 씬 진입 직후 — 이전 씬 오디오의 stale 타임스탬프 무시.
+       새 오디오가 t < 2 에서 시작하면 플래그 해제하고 정상 처리 재개. */
+    if (awaitingSceneAudio) {
+      lastAudioT = t;
+      if (t < 2) awaitingSceneAudio = false;
+      return;
+    }
 
     /* 되감기 감지 — 전체 리셋 후 현재 위치에서 재시작 */
     if (t < lastAudioT - 2) {

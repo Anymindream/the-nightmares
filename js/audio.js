@@ -73,6 +73,16 @@ function updateLyricsDisplay(currentTime) {
   const currEl = d.querySelector('.lyric-curr');
   const nextEl = d.querySelector('.lyric-next');
 
+  /* idx = -1: currentTime이 첫 가사 이전 — 초기 대기 상태로 복원 */
+  if (idx < 0) {
+    currEl.classList.remove('lyric-in');
+    currEl.classList.add('lyric-waiting');
+    prevEl.textContent = '';
+    currEl.textContent = lyricsLines[0] ? lyricsLines[0].text : '';
+    nextEl.textContent = lyricsLines[1] ? lyricsLines[1].text : '';
+    return;
+  }
+
   currEl.classList.remove('lyric-waiting');
   prevEl.textContent = idx > 0 ? lyricsLines[idx - 1].text : '';
   nextEl.textContent = idx < lyricsLines.length - 1 ? lyricsLines[idx + 1].text : '';
@@ -93,6 +103,7 @@ const STEPS       = 40;
 
 let activeAudio = null;
 let paused      = false;
+let userSeeking = false;  /* 시크바 드래그 중 timeupdate가 fill을 덮어쓰지 않도록 */
 
 function fadeVolume(audio, from, to, ms, done) {
   audio.volume = Math.max(0, Math.min(1, from));
@@ -147,7 +158,8 @@ function playScene(index) {
   /* 씬별 타임라인 트리거 + 시크바 업데이트 */
   next.addEventListener('timeupdate', () => {
     window.dispatchEvent(new CustomEvent('audioTimeUpdate', { detail: { time: next.currentTime } }));
-    if (next.duration) {
+    /* 시크바 드래그 중이면 fill 업데이트 건너뜀 — seekTo가 직접 설정한 값 유지 */
+    if (!userSeeking && next.duration) {
       const fill = document.getElementById('seek-fill');
       if (fill) fill.style.width = (next.currentTime / next.duration * 100) + '%';
     }
@@ -201,12 +213,12 @@ function togglePlayPause() {
 /* ── 시크바 — 클릭 & 드래그 ── */
 (function () {
   const seekBar = document.getElementById('seek-bar');
-  let seeking = false;
 
   function seekTo(e) {
     if (!activeAudio || !activeAudio.duration) return;
     const rect = seekBar.getBoundingClientRect();
     const ratio = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+    if (!isFinite(ratio)) return;
     activeAudio.currentTime = ratio * activeAudio.duration;
     const fill = document.getElementById('seek-fill');
     if (fill) fill.style.width = (ratio * 100) + '%';
@@ -214,13 +226,22 @@ function togglePlayPause() {
 
   seekBar.addEventListener('mousedown', e => {
     e.stopPropagation();
-    seeking = true;
+    userSeeking = true;
     seekTo(e);
   });
 
   window.addEventListener('mousemove', e => {
-    if (seeking) seekTo(e);
+    if (userSeeking) seekTo(e);
   });
 
-  window.addEventListener('mouseup', () => { seeking = false; });
+  window.addEventListener('mouseup', () => {
+    if (userSeeking) {
+      userSeeking = false;
+      /* mouseup 후 fill을 현재 실제 위치에 동기화 */
+      if (activeAudio && activeAudio.duration) {
+        const fill = document.getElementById('seek-fill');
+        if (fill) fill.style.width = (activeAudio.currentTime / activeAudio.duration * 100) + '%';
+      }
+    }
+  });
 })();
