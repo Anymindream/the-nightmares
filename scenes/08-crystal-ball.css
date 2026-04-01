@@ -1,0 +1,164 @@
+/* ─────────────────────────────────────────────
+   SCENE 08 — Crystal Ball
+───────────────────────────────────────────── */
+
+/* ── 불꽃 레이어 컨테이너 ── */
+.cb-flame-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 4;   /* scene-overlay(5) 아래 */
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* ── 이미지 프레임 ──
+   aspect-ratio로 배경 이미지(2816×1536)와 동일한 cover 스케일링 */
+.cb-image-frame {
+  position: absolute;
+  aspect-ratio: 2816 / 1536;
+  min-width: 100%;
+  min-height: 100%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* ── 개별 불꽃 ──
+   left / top = 원본 이미지 기준 심지 끝 좌표 %
+   transform: translate(-50%, -100%) → 바닥 중심이 좌표에 오도록
+   transform-origin: center bottom → 바닥 기준으로 흔들림 */
+.cb-flame {
+  position: absolute;
+  aspect-ratio: 1 / 2;
+  transform: translate(-50%, -100%);
+  transform-origin: center bottom;
+  background: radial-gradient(
+    ellipse 55% 65% at 50% 70%,
+    #ffffff 0%,
+    #fff4a0 20%,
+    #ffb300 45%,
+    #ff6600 68%,
+    rgba(255, 60, 0, 0) 100%
+  );
+  border-radius: 50% 50% 25% 25% / 60% 60% 35% 35%;
+  filter: blur(1.5px);
+  will-change: transform, opacity;
+}
+
+/* ── 불꽃 흔들림 키프레임 ──
+   translate(-50%, -100%)를 매 키프레임에 포함해야 기준점 유지 */
+/* ── 크리스탈 볼 번개 애니메이션 ── */
+@keyframes cbBallGlow {
+  0%, 100% { opacity: 0; }
+  7%   { opacity: 0; }
+  8%   { opacity: 1.00; }
+  20%  { opacity: 0.70; }
+  22%  { opacity: 0; }
+  44%  { opacity: 0; }
+  45%  { opacity: 0.90; }
+  55%  { opacity: 0.60; }
+  57%  { opacity: 0; }
+  74%  { opacity: 0; }
+  75%  { opacity: 1.00; }
+  85%  { opacity: 0.65; }
+  87%  { opacity: 0; }
+}
+
+@keyframes cbLightningBolt {
+  0%, 100% { opacity: 0; }
+  7%   { opacity: 0; }
+  8%   { opacity: 1; }
+  10%  { opacity: 0.35; }
+  11%  { opacity: 0.90; }
+  15%  { opacity: 0.50; }
+  16%  { opacity: 0.85; }
+  20%  { opacity: 0; }
+  44%  { opacity: 0; }
+  45%  { opacity: 0.90; }
+  47%  { opacity: 0.25; }
+  48%  { opacity: 0.75; }
+  56%  { opacity: 0; }
+  74%  { opacity: 0; }
+  75%  { opacity: 1; }
+  77%  { opacity: 0.20; }
+  78%  { opacity: 0.90; }
+  82%  { opacity: 0.45; }
+  83%  { opacity: 0.75; }
+  87%  { opacity: 0; }
+}
+
+/* ── 연기 SVG 경로 애니메이션 ──
+   stroke-dashoffset 감소 → 모르타르에서 위로 선이 그려지며 피어오름
+   --path-len 은 JS에서 각 path 요소에 개별 설정 */
+@keyframes cbSmokeRise {
+  0%   { stroke-dashoffset: var(--path-len); opacity: 0;    }
+  12%  { opacity: 0.55; }
+  85%  { opacity: 0.35; }
+  100% { stroke-dashoffset: 0;              opacity: 0;    }
+}
+
+@keyframes flameFlicker {
+  0%   { transform: translate(-50%, -100%) scaleX(1.00) scaleY(1.00) rotate(  0deg); opacity: 0.90; }
+  15%  { transform: translate(-50%, -100%) scaleX(0.82) scaleY(1.12) rotate( -5deg); opacity: 1.00; }
+  30%  { transform: translate(-50%, -100%) scaleX(1.10) scaleY(0.90) rotate(  4deg); opacity: 0.85; }
+  50%  { transform: translate(-50%, -100%) scaleX(0.88) scaleY(1.08) rotate( -3deg); opacity: 0.95; }
+  65%  { transform: translate(-50%, -100%) scaleX(1.06) scaleY(0.95) rotate(  3deg); opacity: 0.88; }
+  80%  { transform: translate(-50%, -100%) scaleX(0.92) scaleY(1.04) rotate( -2deg); opacity: 1.00; }
+  100% { transform: translate(-50%, -100%) scaleX(1.00) scaleY(1.00) rotate(  0deg); opacity: 0.90; }
+}
+
+/* ── 마스크 레이어 (크리스탈 볼 내부 — smoke SVG 아래) ── */
+.cb-mask-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.cb-mask-c,
+.cb-mask-t {
+  position: absolute;
+  width: 17.4%;     /* 볼 직경 = 490 / 2816 */
+  aspect-ratio: 1 / 1;
+  left: 50.41%;
+  top: 47.92%;
+  transform: translate(-50%, -50%);
+  object-fit: cover;
+  -webkit-mask-image: radial-gradient(circle at center, black 40%, transparent 72%);
+  mask-image: radial-gradient(circle at center, black 40%, transparent 72%);
+  opacity: 0;
+  will-change: opacity;
+}
+
+/* 스트로브 키프레임 — step-start로 즉각적인 on/off 전환 */
+@keyframes cbStrobeC {
+  /* 첫 40%: 3번 빠른 플래시, 나머지: 꺼짐 */
+  0%   { opacity: 0; }
+  6%   { opacity: 0.5; }
+  12%  { opacity: 0; }
+  18%  { opacity: 0.5; }
+  24%  { opacity: 0; }
+  30%  { opacity: 0.5; }
+  36%  { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+@keyframes cbStrobeT {
+  /* 앞 50% 꺼짐, 후반 40%: 3번 빠른 플래시 */
+  0%   { opacity: 0; }
+  50%  { opacity: 0; }
+  56%  { opacity: 0.5; }
+  62%  { opacity: 0; }
+  68%  { opacity: 0.5; }
+  74%  { opacity: 0; }
+  80%  { opacity: 0.5; }
+  86%  { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+.cb-mask-active .cb-mask-c {
+  animation: cbStrobeC 2.5s step-start infinite;
+}
+
+.cb-mask-active .cb-mask-t {
+  animation: cbStrobeT 2.5s step-start infinite;
+}

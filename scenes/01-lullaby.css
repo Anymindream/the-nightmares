@@ -1,0 +1,37 @@
+/* ─────────────────────────────────────────────
+   SCENE 01 — Lullaby
+───────────────────────────────────────────── */
+
+/* ── 배경 슬로우 줌 ── */
+@keyframes slowZoom {
+  from { transform: scale(1); }
+  to   { transform: scale(1.2); }
+}
+
+.background-img {
+  animation: slowZoom 20s ease-in-out infinite alternate;
+  transform-origin: center center;
+}
+
+/* ── 잉크닷: 오퍼시티 (0 → 0.7 → 0) ── */
+@keyframes inkFade {
+  0%   { opacity: 0;   }
+  50%  { opacity: 0.6; }
+  100% { opacity: 0;   }
+}
+
+/* ── 잉크닷: 스케일 (독립적으로 순환) ── */
+@keyframes inkPulse {
+  0%   { transform: scale(0.6); }
+  50%  { transform: scale(1.0); }
+  100% { transform: scale(0.6); }
+}
+
+.inkdot {
+  position: absolute;
+  pointer-events: none;
+  z-index: 10;
+  transform-origin: center center;
+  will-change: opacity, transform;
+  /* duration / delay 는 JS에서 각각 개별 지정 */
+}

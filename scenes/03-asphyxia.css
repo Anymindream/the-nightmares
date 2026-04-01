@@ -1,0 +1,8 @@
+/* ─────────────────────────────────────────────
+   SCENE 03 — Asphyxia of Dreams
+───────────────────────────────────────────── */
+
+.asphyxia-ripple {
+  filter: url(#asphyxia-ripple);
+  will-change: filter;
+}

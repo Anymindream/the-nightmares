@@ -1,0 +1,94 @@
+/* ─────────────────────────────────────────────
+   SCENE 04 — Them
+───────────────────────────────────────────── */
+
+/* ── 눈 이미지 레이어 컨테이너 ──
+   overflow:hidden → 프레임 가장자리 클리핑 */
+.them-eyes-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 11;
+  overflow: hidden;
+}
+
+/* ── 이미지 프레임 ──
+   aspect-ratio + min-width/height → background-size:cover 와 동일한 스케일링.
+   top/left 50% + translate(-50%,-50%) → 화면 중앙 기준 배치.
+   JS positionFrame() 불필요 — CSS가 자동 처리. */
+.them-image-frame {
+  position: absolute;
+  aspect-ratio: 3056 / 1257;
+  min-width: 100%;
+  min-height: 100%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* ── 개별 눈 이미지 ──
+   left / top = 원본 이미지 기준 눈 중심점 %
+   transform: translate(-50%, -50%) → 이미지 중심이 좌표에 정확히 오도록
+   opacity 0 = 눈 뜬 상태(배경 보임)
+   opacity 1 = 눈 감은 상태(눈꺼풀 이미지 보임) */
+.them-eye-img {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  object-fit: fill;
+  opacity: 0;
+  will-change: opacity;
+  pointer-events: none;
+}
+
+/* ── 깜빡임 키프레임 ──
+   0%  : 눈 뜸
+   15% : 서서히 감힘
+   75% : 감긴 채 유지
+   100%: 다시 뜸 */
+@keyframes eyeBlink {
+  0%   { opacity: 0; }
+  15%  { opacity: 1; }
+  75%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* ── scene-overlay가 눈 레이어 위에도 적용되도록 z-index 조정 ── */
+#scene-4 .scene-overlay {
+  z-index: 12;
+}
+
+/* ── 큐브 레이어 ── */
+.them-cube-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 13;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.them-cube {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.03);
+  will-change: transform, opacity;
+  opacity: 0;
+}
+
+/* ── 별빛 레이어 ── */
+.them-star-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 6;   /* 그라데이션 오버레이(12) 아래 */
+  pointer-events: none;
+}
+
+.them-star {
+  position: absolute;
+  border-radius: 50%;
+  background: white;
+  will-change: opacity;
+}
+
+@keyframes starTwinkle {
+  0%   { opacity: 0; }
+  50%  { opacity: 1; }
+  100% { opacity: 0; }
+}

@@ -1,0 +1,125 @@
+/* ─────────────────────────────────────────────
+   SCENE 09 — Dream Commander
+───────────────────────────────────────────── */
+
+/* ── 별 레이어 컨테이너 ── */
+.dc-star-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 4;   /* scene-overlay(5) 아래 */
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* ── Scene 04 스타일: 흰 원형 점 ── */
+.dc-star {
+  position: absolute;
+  border-radius: 50%;
+  background: white;
+  will-change: opacity;
+  box-shadow: 0 0 4px 1px rgba(255, 255, 255, 0.6);
+}
+
+@keyframes dcStarTwinkle {
+  0%   { opacity: 0; }
+  50%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* ── 왼쪽 텍스트 가독성 그라데이션 (마지막 배경 시에만 페이드 인) ── */
+.dc-left-grad {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 50%);
+  z-index: 5;
+  pointer-events: none;
+  opacity: 0;
+}
+
+/* ── 하단 텍스트 영역 그라데이션 (항상 유지) ── */
+.dc-bottom-grad {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 20%;
+  background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 100%);
+  z-index: 5;
+  pointer-events: none;
+}
+
+/* ── 타임스탬프 트리거 오버레이 이미지 초기 상태 ── */
+.dc-sky-img,
+.dc-cmd-img,
+.dc-cmd3-img,
+.dc-sunray-img {
+  opacity: 0;
+}
+
+/* ── 번개 레이어 ── */
+.dc-lightning-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 6;   /* scene-overlay(5) 바로 위 */
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* scene-08 와 동일한 커버-스케일링 */
+.dc-lightning-frame {
+  position: absolute;
+  aspect-ratio: 2816 / 1536;
+  min-width: 100%;
+  min-height: 100%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* 루프 번개 키프레임 (Phase 1 — 먹구름 단계, infinite) */
+@keyframes dcLightningLoop {
+  0%   { opacity: 0;    }
+  3%   { opacity: 0;    }
+  4%   { opacity: 0.85; }
+  8%   { opacity: 0;    }
+  18%  { opacity: 0;    }
+  19%  { opacity: 0.70; }
+  22%  { opacity: 0.20; }
+  23%  { opacity: 0.60; }
+  27%  { opacity: 0;    }
+  45%  { opacity: 0;    }
+  46%  { opacity: 0.90; }
+  50%  { opacity: 0.30; }
+  51%  { opacity: 0.80; }
+  58%  { opacity: 0;    }
+  72%  { opacity: 0;    }
+  73%  { opacity: 0.75; }
+  77%  { opacity: 0;    }
+  88%  { opacity: 0;    }
+  89%  { opacity: 0.65; }
+  93%  { opacity: 0.15; }
+  94%  { opacity: 0.55; }
+  100% { opacity: 0;    }
+}
+
+/* 번쩍임 키프레임 (one-shot, forwards) */
+@keyframes dcLightningBolt {
+  0%   { opacity: 0;    }
+  4%   { opacity: 0;    }
+  5%   { opacity: 1;    }
+  13%  { opacity: 0.35; }
+  14%  { opacity: 0.90; }
+  21%  { opacity: 0.50; }
+  22%  { opacity: 0.85; }
+  30%  { opacity: 0;    }
+  48%  { opacity: 0;    }
+  49%  { opacity: 0.90; }
+  54%  { opacity: 0.25; }
+  55%  { opacity: 0.75; }
+  65%  { opacity: 0;    }
+  73%  { opacity: 0;    }
+  74%  { opacity: 1;    }
+  78%  { opacity: 0.20; }
+  79%  { opacity: 0.85; }
+  86%  { opacity: 0.40; }
+  90%  { opacity: 0;    }
+  100% { opacity: 0;    }
+}

@@ -1,0 +1,492 @@
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --t: 1.8s;
+  --t-ease: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+html, body {
+  width: 100%; height: 100%;
+  overflow: hidden;
+  background: #000;
+  font-family: 'Georgia', 'Times New Roman', serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── RAIL — clips the horizontal strip ── */
+#rail {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+}
+
+/* ── STAGE — the full-width horizontal strip ── */
+#stage {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  position: relative;
+  will-change: transform;
+  transform: translateX(0);
+  transition: transform var(--t) var(--t-ease);
+}
+
+/* ── SCENE — one panel in the strip ── */
+.scene {
+  width: 100vw;
+  height: 100%;
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* ── SCENE BACKGROUND — 애니메이션 적용 대상 레이어 ── */
+.scene-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  z-index: 0;
+  transform-origin: center center;
+}
+
+
+/* colour-tinted gradient overlay per scene */
+.scene-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* ── TEXT BLOCK ── */
+.scene-text {
+  position: relative;
+  z-index: 100;
+  padding: 0 8vw 10vh 8vw;
+  width: 100%;
+}
+
+.scene.active .scene-text {
+  animation: textUp 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s both;
+}
+
+@keyframes textUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.scene-num {
+  font-size: clamp(0.65rem, 1vw, 0.8rem);
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+  opacity: 0.55;
+}
+
+.scene-tag {
+  font-size: clamp(0.9rem, 1.5vw, 1.2rem);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  opacity: 0.45;
+  margin-top: 0.55rem;
+  margin-left: 0.5rem;
+}
+
+.scene-title {
+  font-size: clamp(2.2rem, 5.5vw, 4.8rem);
+  font-weight: normal;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  margin-bottom: 1rem;
+}
+
+.scene-mood {
+  font-size: clamp(0.7rem, 1.1vw, 0.875rem);
+  font-style: italic;
+  opacity: 0.38;
+  max-width: 38ch;
+  line-height: 1.65;
+}
+
+/* ── HOME SCENE ── */
+.scene-home {
+  position: relative;
+  z-index: 100;
+  padding: 0 8vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding-bottom: 10vh;
+  height: 100%;
+  width: 100%;
+}
+
+.scene.active .scene-home {
+  animation: textUp 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.3s both;
+}
+
+.home-album-tag {
+  font-size: clamp(0.9rem, 1.5vw, 1.2rem);
+  letter-spacing: 0.45em;
+  text-transform: uppercase;
+  opacity: 0.45;
+  margin-bottom: 0.6rem;
+}
+
+.home-title {
+  font-size: clamp(2.8rem, 7vw, 7rem);
+  font-weight: normal;
+  line-height: 0.92;
+  margin-bottom: 2.5rem;
+}
+
+.home-artist {
+  font-size: clamp(0.7rem, 1.1vw, 0.9rem);
+  font-style: italic;
+  opacity: 0.45;
+  margin-bottom: 1.8rem;
+  letter-spacing: 0.05em;
+}
+
+.home-tracklist {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  width: fit-content;
+}
+
+.home-track {
+  display: flex;
+  align-items: baseline;
+  gap: 0.9rem;
+  padding: 0.45rem 0;
+  cursor: pointer;
+  opacity: 0.55;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.home-track:hover { opacity: 0.85; transform: translateX(4px); }
+
+/* ── COMMON TRACKLIST ITEM PARTS ── */
+.tl-num {
+  font-size: 0.58rem;
+  letter-spacing: 0.3em;
+  opacity: 0.55;
+  flex-shrink: 0;
+  font-style: normal;
+}
+
+.home-track .tl-name {
+  font-size: clamp(0.85rem, 1.4vw, 1.1rem);
+  font-style: italic;
+}
+
+/* ── SCENE HOME LINK ── */
+.scene-home-link {
+  font-size: clamp(0.6rem, 0.9vw, 0.75rem);
+  letter-spacing: 0.45em;
+  text-transform: uppercase;
+  opacity: 0.4;
+  margin-bottom: 0.8rem;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.scene-home-link:hover { opacity: 0.75; }
+
+/* ── SCENE TRACKLIST (곡 페이지) ── */
+.scene-tracklist {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1.6rem;
+}
+
+.scene-track {
+  display: flex;
+  align-items: baseline;
+  gap: 0.7rem;
+  padding: 0.28rem 0;
+  cursor: pointer;
+  opacity: 0.28;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  font-style: italic;
+}
+
+.scene-track:hover { opacity: 0.65; transform: translateX(3px); }
+
+.scene-track.active {
+  opacity: 0.75;
+  cursor: default;
+}
+
+.scene-track .tl-name {
+  font-size: clamp(0.85rem, 1.4vw, 1.1rem);
+}
+
+@media (max-width: 600px) {
+  .home-title {
+    font-size: clamp(2.5rem, 11vw, 4rem);
+  }
+}
+
+/* ── NAV DOTS — hidden ── */
+#dots {
+  display: none;
+}
+
+.dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.22);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: background 0.4s ease, transform 0.4s ease;
+}
+
+.dot:hover { background: rgba(255,255,255,0.5); }
+.dot.active {
+  background: rgba(255,255,255,0.88);
+  transform: scale(1.6);
+}
+
+/* ── NAV ARROWS ── */
+.arrow {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 200;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 2rem 1.6rem;
+  color: rgba(255,255,255,0.32);
+  transition: color 0.25s ease, opacity 0.4s ease, background 0.25s ease;
+  line-height: 0;
+}
+
+.arrow:hover {
+  color: rgba(255,255,255,0.88);
+  background: rgba(0,0,0,0.15);
+}
+
+.arrow.hidden { opacity: 0; pointer-events: none; }
+
+#arrow-prev { left: 0; }
+#arrow-next { right: 0; }
+
+.arrow svg {
+  width: 36px; height: 36px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ── HINT ── */
+#hint {
+  position: fixed;
+  bottom: 4.8rem;
+  left: 50%;
+  transform: translateX(-50%);
+  color: rgba(255,255,255,0.28);
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  z-index: 200;
+  transition: opacity 2s ease;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+#hint.gone { opacity: 0; }
+
+@media (max-width: 480px) {
+  .scene-home {
+    padding-bottom: calc(4.8rem + 3rem);
+  }
+}
+
+/* ── SCENE 06 LEFT GRADIENT ── */
+.bt-left-grad {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 50%);
+  z-index: 5;
+  pointer-events: none;
+}
+
+/* ── STREAMING ICONS ── */
+#streaming-icons {
+  position: fixed;
+  bottom: 4.8rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 1.25rem;
+  align-items: center;
+  z-index: 200;
+  transition: opacity 0.4s ease;
+}
+
+#streaming-icons.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.streaming-icon img {
+  display: block;
+  width: 24px;
+  height: 24px;
+  filter: brightness(0) invert(1);
+  opacity: 0.5;
+  transition: filter 0.3s ease, opacity 0.3s ease;
+}
+
+.streaming-icon:hover img {
+  filter: none;
+  opacity: 1;
+}
+
+[aria-label="Tidal"]:hover img {
+  filter: brightness(0) invert(1);
+}
+
+/* ── LYRICS DISPLAY ── */
+#lyrics-display {
+  position: fixed;
+  bottom: 5.8rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 200;
+  text-align: center;
+  pointer-events: none;
+  width: 90vw;
+  max-width: 580px;
+}
+
+.lyric-line {
+  font-family: 'Georgia', serif;
+  font-style: italic;
+  color: white;
+  line-height: 1.7;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.lyric-prev,
+.lyric-next {
+  font-size: clamp(0.85rem, 1.3vw, 1rem);
+  opacity: 0.2;
+}
+
+.lyric-curr {
+  font-size: clamp(1.1rem, 2vw, 1.5rem);
+  opacity: 0.85;
+}
+
+@keyframes lyricIn {
+  from { opacity: 0.2; }
+  to   { opacity: 0.85; }
+}
+
+.lyric-curr.lyric-in {
+  animation: lyricIn 0.5s ease forwards;
+}
+
+.lyric-curr.lyric-waiting {
+  opacity: 0.25;
+  color: #aaa;
+  animation: none;
+}
+
+/* ── C안: 데스크탑 — 가사 활성 시 씬 제목 블록을 위로 밀기 ── */
+body.has-lyrics .scene-text {
+  padding-bottom: 22vh;
+}
+
+/* ── D안: 모바일 — 가사를 화면 상단 중앙으로 ── */
+@media (max-width: 600px) {
+  #lyrics-display {
+    bottom: auto;
+    top: 18%;
+    transform: translateX(-50%);
+  }
+
+  /* 모바일은 가사가 상단이므로 제목 밀기 불필요 */
+  body.has-lyrics .scene-text {
+    padding-bottom: 10vh;
+  }
+}
+
+/* ── PLAYER BAR (bottom center) ── */
+#player-bar {
+  position: fixed;
+  bottom: 2.2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 200;
+  display: none;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+#player-bar button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  opacity: 0.35;
+  transition: opacity 0.3s;
+  line-height: 0;
+}
+
+#player-bar button:hover { opacity: 0.8; }
+#player-bar button svg { width: 20px; height: 20px; fill: white; display: block; }
+
+#seek-bar {
+  width: 160px;
+  height: 3px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 2px;
+  cursor: pointer;
+  position: relative;
+  opacity: 0.35;
+  transition: opacity 0.3s;
+}
+
+#seek-bar:hover { opacity: 0.8; }
+
+#seek-fill {
+  height: 100%;
+  width: 0%;
+  background: rgba(255,255,255,0.85);
+  border-radius: 2px;
+  pointer-events: none;
+}
+
+/* ── SCENE COUNTER ── */
+#counter {
+  display: none;
+}
+
+/* ── PROGRESS BAR ── */
+#progress-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  background: rgba(255,255,255,0.35);
+  z-index: 200;
+  transition: width var(--t) var(--t-ease);
+}

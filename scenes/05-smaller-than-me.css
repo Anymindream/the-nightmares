@@ -1,0 +1,74 @@
+/* ─────────────────────────────────────────────
+   SCENE 05 — Smaller Than Me
+───────────────────────────────────────────── */
+
+/* ── 배경 2번째 이미지 (전체화면 교차 페이드) ── */
+.stm-bg2 {
+  position: absolute;
+  inset: 0;
+  background-image: url('../Images/smaller/5smallerthanme2.webp');
+  background-size: cover;
+  background-position: center center;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.stm-bg2.running {
+  animation: stmBgFade 8s ease-in-out infinite;
+}
+
+@keyframes stmBgFade {
+  0%   { opacity: 0; }
+  15%  { opacity: 1; }
+  50%  { opacity: 1; }
+  65%  { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+/* ── 소녀 이미지 스택 컨테이너 ── */
+.stm-stack {
+  position: absolute;
+  top: 63%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 6;
+  pointer-events: none;
+  width: 0;
+  height: 0;
+}
+
+.stm-stack img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 48vw;
+  max-height: 48vh;
+  object-fit: contain;
+  opacity: 0;
+}
+
+/* ── 순차 교차 페이드
+   사이클: 8s (4장 × 2s 간격)
+   각 이미지: 2s 페이드인 + 0s 유지 + 2s 페이드아웃
+──────────────────────────────────────────── */
+@keyframes stmSeqFade {
+  0%   { opacity: 0; }
+  25%  { opacity: 1; }   /* 2s 페이드인 */
+  50%  { opacity: 0; }   /* 2s 페이드아웃 */
+  100% { opacity: 0; }
+}
+
+.stm-stack.running img:nth-child(1) {
+  animation: stmSeqFade 8s ease-in-out infinite 0s;
+}
+.stm-stack.running img:nth-child(2) {
+  animation: stmSeqFade 8s ease-in-out infinite 2s;
+}
+.stm-stack.running img:nth-child(3) {
+  animation: stmSeqFade 8s ease-in-out infinite 4s;
+}
+.stm-stack.running img:nth-child(4) {
+  animation: stmSeqFade 8s ease-in-out infinite 6s;
+}

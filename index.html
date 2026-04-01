@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dream Cycle — The Nightmares</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="scenes/01-lullaby.css">
+  <link rel="stylesheet" href="scenes/02-ghost.css">
+  <link rel="stylesheet" href="scenes/03-asphyxia.css">
+  <link rel="stylesheet" href="scenes/04-them.css">
+  <link rel="stylesheet" href="scenes/05-smaller-than-me.css">
+  <link rel="stylesheet" href="scenes/08-crystal-ball.css">
+  <link rel="stylesheet" href="scenes/09-dream-commander.css">
+</head>
+<body>
+
+<div id="rail"><div id="stage"></div></div>
+
+<button class="arrow hidden" id="arrow-prev" aria-label="Previous scene">
+  <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+</button>
+<button class="arrow" id="arrow-next" aria-label="Next scene">
+  <svg viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18"/></svg>
+</button>
+
+<div id="dots"></div>
+<div id="hint"></div>
+<div id="streaming-icons">
+  <a href="https://open.spotify.com/album/39MH9JnX5nWLvtlBe6Djch" target="_blank"class="streaming-icon" aria-label="Spotify">
+    <img src="https://cdn.simpleicons.org/spotify" width="24" height="24" alt="Spotify">
+  </a>
+  <a href="https://music.apple.com/us/album/the-nightmares/1814763737" target="_blank" class="streaming-icon" aria-label="Apple Music">
+    <img src="https://cdn.simpleicons.org/applemusic" width="24" height="24" alt="Apple Music">
+  </a>
+  <a href="https://www.youtube.com/playlist?list=OLAK5uy_lMkvStv__mOyBx7VfV_t6U3zvkFkOpK5s" target="_blank" class="streaming-icon" aria-label="YouTube">
+    <img src="https://cdn.simpleicons.org/youtube" width="24" height="24" alt="YouTube">
+  </a>
+  <a href="https://tidal.com/album/436263233" target="_blank" class="streaming-icon" aria-label="Tidal">
+    <img src="https://cdn.simpleicons.org/tidal" width="24" height="24" alt="Tidal">
+  </a>
+  <a href="https://www.pandora.com/artist/anymind/the-nightmares/ALXnt7mlv7Zb2fc" target="_blank" class="streaming-icon" aria-label="Pandora">
+    <img src="https://cdn.simpleicons.org/pandora" width="24" height="24" alt="Pandora">
+  </a>
+</div>
+<div id="counter">THE NIGHTMARES</div>
+<div id="progress-bar"></div>
+
+<div id="lyrics-display" style="display:none">
+  <div class="lyric-line lyric-prev"></div>
+  <div class="lyric-line lyric-curr"></div>
+  <div class="lyric-line lyric-next"></div>
+</div>
+
+<div id="player-bar">
+  <button id="player-playpause" aria-label="Pause">
+    <svg viewBox="0 0 24 24" fill="white"><path id="player-path" d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+  </button>
+  <div id="seek-bar" role="slider" aria-label="Song progress">
+    <div id="seek-fill"></div>
+  </div>
+  <button id="player-next" aria-label="Next song">
+    <svg viewBox="0 0 24 24" fill="white"><path d="M6 18l8.5-6L6 6v12zm10-12v12h2V6h-2z"/></svg>
+  </button>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/script.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/nav.js"></script>
+<script src="js/scenes/01-lullaby.js"></script>
+<script src="js/scenes/02-ghost.js"></script>
+<script src="js/scenes/03-asphyxia.js"></script>
+<script src="js/scenes/04-them.js"></script>
+<script src="js/scenes/05-smaller-than-me.js"></script>
+<script src="js/scenes/06-between.js"></script>
+<script src="js/scenes/07-jester.js"></script>
+<script src="js/scenes/08-crystal-ball.js"></script>
+<script src="js/scenes/09-dream-commander.js"></script>
+</body>
+</html>
