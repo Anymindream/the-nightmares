@@ -5,18 +5,24 @@
 (function () {
   const sceneEl = document.getElementById('scene-2');
 
-  /* ── 유령 오버레이 이미지 생성 ── */
-  const overlay = document.createElement('img');
-  overlay.src       = 'Images/ghost/2ghost2.webp';
-  overlay.className = 'ghost-overlay';
-  sceneEl.appendChild(overlay);
+  /* ── 이미지 프레임 (배경 원본 비율 3058×1252 기준 좌표 시스템) ── */
+  const ghostFrame = document.createElement('div');
+  ghostFrame.className = 'ghost-frame';
+  sceneEl.appendChild(ghostFrame);
+
+  /* ── 고스트 이미지: 원본 기준 중심 (2112, 626) → 69.07% / 50.00%
+        width 26.55% = 812px / 3058px (원본 ghost-only 폭 비율)       ── */
+  const ghostImg = document.createElement('img');
+  ghostImg.src       = 'Images/ghost/2ghost-only.webp';
+  ghostImg.className = 'ghost-figure';
+  ghostFrame.appendChild(ghostImg);
 
   /* ── 씬 활성 여부에 따라 애니메이션 토글 ── */
   window.addEventListener('sceneChange', (e) => {
     if (e.detail.index === 2) {
-      overlay.classList.add('visible');
+      ghostImg.classList.add('visible');
     } else {
-      overlay.classList.remove('visible');
+      ghostImg.classList.remove('visible');
     }
   });
 

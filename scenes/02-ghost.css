@@ -14,20 +14,32 @@
   100% { opacity: 0;   }
 }
 
-.ghost-overlay {
+/* ── 배경 이미지 비율(3058×1252)과 동일한 프레임 컨테이너 ── */
+.ghost-frame {
   position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
+  aspect-ratio: 3058 / 1252;
+  min-width: 100%;
+  min-height: 100%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
   pointer-events: none;
-  z-index: 11;
+}
+
+/* ── 고스트 이미지: 원본 기준 69.07% / 50.00%, 폭 26.55% ── */
+.ghost-figure {
+  position: absolute;
+  width: 26.55%;
+  height: auto;
+  left: 69.07%;
+  top: 50%;
+  transform: translate(-50%, -50%);
   opacity: 0;
   will-change: opacity;
 }
 
-.ghost-overlay.visible {
+.ghost-figure.visible {
   /* 최초 3s 딜레이 후 → 26s 사이클 반복 */
   animation: ghostAppear 26s ease-in-out 3s infinite;
 }
@@ -35,4 +47,11 @@
 /* ── 그라디언트 오버레이를 고스트 레이어 위로 ── */
 #scene-2 .scene-overlay {
   z-index: 12;
+}
+
+/* ── 모바일: 고스트를 오른쪽에서 40% (= left 60%) 위치로 이동 ── */
+@media (max-width: 767px) {
+  .ghost-figure {
+    left: 60%;
+  }
 }

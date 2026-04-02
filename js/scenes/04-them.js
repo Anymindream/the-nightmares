@@ -87,7 +87,7 @@
   cubeLayer.className = 'them-cube-layer';
   sceneEl.appendChild(cubeLayer);
 
-  const CUBE_COUNT = 28;
+  const CUBE_COUNT = window.innerWidth < 768 ? 8 : 28;
   const cubeStyles = document.createElement('style');
 
   for (let i = 0; i < CUBE_COUNT; i++) {

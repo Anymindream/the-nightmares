@@ -369,10 +369,11 @@
       this.vy       = rand(-0.70, 0.20);
       this.waveFreq = rand(0.008, 0.022);
       this.waveOff  = rand(0, Math.PI * 2);
-      this.size     = rand(280, 550);
+      const mobile  = window.innerWidth < 768;
+      this.size     = mobile ? rand(80, 180) : rand(280, 550);
       this.life     = 0;
       this.maxLife  = Math.floor(rand(220, 480));
-      this.peakOp   = rand(0.32, 0.62);
+      this.peakOp   = mobile ? rand(0.10, 0.22) : rand(0.32, 0.62);
       this.opacity  = 0;
       if (cold) this.life = Math.floor(rand(0, this.maxLife));
     }
@@ -411,7 +412,8 @@
     smokeCanvas.width  = window.innerWidth;
     smokeCanvas.height = window.innerHeight;
     smokeCtx = smokeCanvas.getContext('2d');
-    smokeParticles = Array.from({ length: SMOKE_COUNT }, () => new SmokeParticle());
+    const particleCount = window.innerWidth < 768 ? 7 : SMOKE_COUNT;
+    smokeParticles = Array.from({ length: particleCount }, () => new SmokeParticle());
     sceneEl.appendChild(smokeCanvas);
   }
 
