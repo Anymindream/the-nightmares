@@ -11,7 +11,7 @@
    tiles, applying feDisplacementMap per-tile — producing visible seam lines at
    every 256px interval. Disabling the filter at tablet widths removes the
    artefact; the neon-grid and watercolour canvas layers still animate. */
-@media (max-width: 1440px) {
+@media (max-width: 1920px) {
   .asphyxia-ripple {
     filter: none;
     will-change: auto;
