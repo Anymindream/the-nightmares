@@ -321,7 +321,7 @@
   maskLayer.appendChild(maskT);
   imageFrame.insertBefore(maskLayer, imageFrame.lastElementChild); /* smoke SVG 앞 */
 
-  const MASK_START = 136;  /* 2:16 */
+  const MASK_START = 137;  /* 2:17 */
   const MASK_END   = 153;  /* 2:33 */
 
   window.addEventListener('audioTimeUpdate', (e) => {

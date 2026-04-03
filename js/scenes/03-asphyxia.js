@@ -15,7 +15,7 @@
       <filter id="asphyxia-ripple" x="-8%" y="-8%" width="116%" height="116%"
               color-interpolation-filters="sRGB">
         <feTurbulence type="fractalNoise" baseFrequency="0.002"
-                      numOctaves="1" seed="2" result="noise">
+                      numOctaves="1" seed="2" stitchTiles="stitch" result="noise">
           <animate attributeName="baseFrequency"
             values="0.002; 0.004; 0.002"
             dur="8s"
