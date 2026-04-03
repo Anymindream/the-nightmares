@@ -385,7 +385,7 @@
   /* ── 씬 전환 리스너 ── */
   window.addEventListener('sceneChange', (e) => {
     if (e.detail.index === 3) {
-      if (window.innerWidth > 1024) bg.classList.add('asphyxia-ripple');
+      if (window.innerWidth > 1366) bg.classList.add('asphyxia-ripple');
       start();
     } else {
       bg.classList.remove('asphyxia-ripple');
